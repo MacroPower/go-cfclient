@@ -411,7 +411,8 @@ func encodeBody(obj interface{}) (io.Reader, error) {
 }
 
 func (c *Client) GetToken() (string, error) {
-	if c.Config.tokenSourceDeadline != nil && c.Config.tokenSourceDeadline.Before(time.Now()) {
+	if c.Config.tokenSourceDeadline != nil && c.Config.tokenSourceDeadline.Before(time.Now().Add(24*time.Hour)) {
+		fmt.Printf("The cfclient token should be getting refreshed now, deadline: %s", c.Config.tokenSourceDeadline.String())
 		if err := c.refreshEndpoint(); err != nil {
 			return "", err
 		}
